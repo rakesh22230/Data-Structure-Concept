@@ -26,6 +26,7 @@ Test searchByKeyDuplicateReturn(Node* &head,int key);
 void deleteAtHead(Node* &head);
 void deleteAtTail(Node* &head);
 void deletionAtSpecificPosition(Node* &head,int position);
+Node *reverseNonRecursive(Node* &head);
 // Insert At Head
 void insertAtHead(Node* &head,int val)
 {
@@ -254,7 +255,39 @@ void deletionByValueUnique(Node* &head,int value){
 		deletionAtSpecificPosition(head,position);
 	}
 	
-	// Delete the node at the position
+}
+// Reverse Linked list
+Node *reverseNonRecursive(Node* &head){
+	Node *prev = NULL;
+	Node *current = head;
+	if(head==NULL) {
+		cout<<"The linked list is empty!"<<endl;
+		return head;
+	}
+	Node *next = head->Next;
+	while(true){
+		current->Next = prev;
+		prev = current;
+		current = next;
+		if(current == NULL) break;
+		next = next->Next;
+	}
+	return prev;
+}
+// Reversal Recursive Linked List :
+Node *reverseRecursive(Node* &head){
+
+	// Base Call
+	if(head==NULL || head->Next==NULL){
+	  if(head==NULL) cout<<"The Linked list is empty!"<<endl;
+	  return head;
+	}
+	// Recursive Call
+	Node *newHead = reverseRecursive(head->Next);
+	head->Next->Next = head;
+	head->Next = NULL;
+	
+	return newHead;
 }
 // Main function
 int main()
@@ -271,6 +304,8 @@ int main()
          << "Choice 8: Deletion At Tail"<<endl
          << "Choice 9: Deletion At a specific position"<<endl
          << "Choice 10: Deletion By value with Unique linked list."<<endl
+         << "Choice 11: Reversal of List (Non Recursive way) "<<endl
+         << "Choice 12: Reversal of List (Recursive way) "<<endl
          << "Choice 0: Exit" << endl;
 
     int choice,position,key;
@@ -357,6 +392,12 @@ int main()
         	cin>>val;
         	deletionByValueUnique(head,val);
         	break;
+        case 11:
+        	head = reverseNonRecursive(head);
+        	break;
+        case 12:
+        	head = reverseRecursive(head);
+        	break;
         default:
             cout<<"Invalid Choice";
         }
@@ -371,3 +412,5 @@ int main()
 
     return 0;
 }
+
+
