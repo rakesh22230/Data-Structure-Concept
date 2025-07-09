@@ -16,6 +16,9 @@ class TreeNode{
 // Function Decleararion 
 void InOrdertraversal(TreeNode* root, string &s);
 TreeNode* Construct_BST(TreeNode* root,int val);
+TreeNode* SearchBST(TreeNode* root, int val);
+TreeNode* insucess(TreeNode* root);
+TreeNode* DeletionBST(TreeNode* root,int val);
 
 // In Order Traversal
 void InOrdertraversal(TreeNode* root, string &s){
@@ -59,15 +62,57 @@ TreeNode* SearchBST(TreeNode* root, int val){
 
     // value less than root
     if( val < root->val){
-        cout<<root->val<<"->";
+        cout<<root->val<<"-> ";
         SearchBST(root->left,val);
     } 
     // value greather than root
     else{
-        cout<<root->val<<"->";
+        cout<<root->val<<"-> ";
         SearchBST(root->right,val);
     }
     
+}
+// Insuccessor Node
+TreeNode* insucess(TreeNode* root){
+    TreeNode* curr = root;
+    while( curr->left != NULL ){
+        curr = curr->left;
+    }
+    return curr;
+}
+
+// Deletion BST 
+TreeNode* DeletionBST(TreeNode* root,int val){
+    if(root == NULL ) return NULL;
+    // First we have to travasel to reach this delete Node
+    if( val < root->val){
+        root->left = DeletionBST(root->left,val);
+    }
+    else if( val > root->val) {
+        root->right = DeletionBST(root->right,val);
+    } 
+    // Implementation Part two solve 3 case 
+    else {
+
+        if( root->left == NULL ) {    // case 1 :  Delete Node have a one children || Case 2 : Delete node is a leaf Node
+            TreeNode* temp = root->right;
+            delete root;
+            return temp;
+        } 
+        else if( root->right == NULL ) {  // Case 1 :  Delete Node have a one Childreen 
+            TreeNode* temp = root->left;
+            delete root;
+            return temp;
+        } 
+        else{
+            // Delete Node have a two children or successor root
+            TreeNode* temp = insucess(root->right);
+            root->val = temp->val;
+            root->right = DeletionBST(root->right, temp->val);
+        }
+        
+
+    }
 }
 int main(){
      int n;
@@ -79,8 +124,8 @@ int main(){
        root =  Construct_BST(root,value);
      }
      string IOT="";
-     //InOrdertraversal(root,IOT);
-     //cout<<IOT<<endl;
+     InOrdertraversal(root,IOT);
+     cout<<IOT<<endl;
 
      int key;
      cout<<"Enter your value want to search: ";
@@ -90,8 +135,20 @@ int main(){
         cout<<endl<<"Value doesn't exits in the list."<<endl;
      } else{
         cout<<endl<<"Value exits in the list."<<endl;
-     }
+     }  
+
+     int value;
+     cout<<"Enter your value you want to delete: ";
+     cin>>value;
+
+     root = DeletionBST(root,value);
+     string afterDelete="";
+     InOrdertraversal(root,afterDelete);
+     cout<<afterDelete<<endl;
+
 
 
     return 0;
 }
+
+
